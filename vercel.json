@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "regions": ["fra1"],
+  "rewrites": [
+    { "source": "/api/health", "destination": "/api/index.js?action=health" },
+    { "source": "/api/rooms", "destination": "/api/index.js?action=create" },
+    { "source": "/api/rooms/:code", "destination": "/api/index.js?code=:code&action=state" },
+    { "source": "/api/rooms/:code/:action", "destination": "/api/index.js?code=:code&action=:action" },
+    { "source": "/api.php", "destination": "/api/index.js" },
+    { "source": "/room", "destination": "/room/index.html" },
+    { "source": "/room/", "destination": "/room/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.exe",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Content-Disposition", "value": "attachment" }
+      ]
+    }
+  ]
+}

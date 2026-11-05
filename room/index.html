@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#09030d">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('playuno_theme')||'midnight'}catch{}</script>
+  <title>TUNOTOGETHER.COM — Room Lobby</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/logos/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/logos/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .room-page{padding:22px 0 70px}
+    .room-top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:13px 16px;border:1px solid rgba(250,204,21,.1);border-radius:18px;background:rgba(18,8,25,.82);box-shadow:0 12px 40px rgba(0,0,0,.3);backdrop-filter:blur(16px);position:relative;z-index:10}
+    .room-brand{display:flex;align-items:center;gap:10px}
+    .room-brand-mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:#0b0610;border:1px solid rgba(250,204,21,.25)}.room-brand-mark img{width:100%;height:100%;object-fit:cover;display:block}
+    .room-brand strong{display:block;font-family:Fredoka;font-size:17px;color:#facc15}
+    .room-brand small{display:block;color:#ef4444;font-size:8px;font-weight:900;letter-spacing:.18em;margin-top:2px}
+    .room-head-actions{display:flex;align-items:center;gap:7px}
+    .room-code-wrap{text-align:right;margin-right:5px}
+    .room-code-wrap span{display:block;color:#625c68;font-size:8px;font-weight:900;letter-spacing:.12em}
+    .room-code-wrap strong{display:block;color:#facc15;font-family:Fredoka;font-size:18px;text-shadow:0 0 18px rgba(250,204,21,.35);animation:codePulse 2.8s ease-in-out infinite}
+    @keyframes codePulse{50%{text-shadow:0 0 28px rgba(250,204,21,.55)}}
+    .mini-btn{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#eae7ed;padding:9px 11px;border-radius:10px;font-size:10px;font-weight:800;transition:.18s}
+    .mini-btn:hover{background:rgba(255,255,255,.09);border-color:rgba(250,204,21,.3);transform:translateY(-1px)}
+    .mini-btn.copied{border-color:rgba(34,197,94,.4);color:#4ade80}
+    .room-grid{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:15px;margin-top:15px}
+    .panel{border:1px solid rgba(255,255,255,.09);border-radius:22px;background:rgba(18,8,25,.80);box-shadow:0 20px 60px rgba(0,0,0,.22);padding:21px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}
+    .panel-head h1,.panel-head h2{margin:0;font-family:Fredoka;font-size:24px}
+    .panel-head p{margin:5px 0 0;color:#77727e;font-size:10px;line-height:1.55}
+    .mode-select{padding:9px 11px;border-radius:10px;background:#0b0610;border:1px solid rgba(255,255,255,.12);color:#facc15;font-size:10px;font-weight:800;outline:none}
+    .mode-select:focus{border-color:#facc15}
+    .mode-select option{background:#150b1c;color:#fff}
+    .players{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+    .player-card{min-height:86px;padding:13px;border-radius:15px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);transition:transform .18s,border-color .18s,box-shadow .18s}
+    .player-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.14)}
+    .player-card.ready-glow{border-color:rgba(34,197,94,.35);box-shadow:0 0 18px rgba(34,197,94,.08)}
+    .player-main{display:flex;align-items:center;gap:10px;min-width:0}
+    .player-avatar{width:45px;height:45px;flex:none;border-radius:13px;display:grid;place-items:center;background:#0b0610;border:1px solid rgba(255,255,255,.08);overflow:hidden}.player-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .player-name{display:block;color:#fff;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .player-meta{display:block;margin-top:4px;color:#77727e;font-size:8px;font-weight:800;line-height:1.5}
+    .player-meta .host{color:#facc15}.player-meta .ready{color:#4ade80}
+    .player-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:999px;font-size:7px;font-weight:900;letter-spacing:.04em;margin-left:4px}
+    .player-badge.app{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2)}
+    .player-badge.noapp{background:rgba(248,113,113,.1);color:#fb7185;border:1px solid rgba(248,113,113,.18)}
+    .player-actions{display:flex;align-items:center;gap:6px;margin-top:9px}
+    .kick-btn{margin-left:auto;border:1px solid rgba(248,113,113,.20);background:rgba(220,38,38,.08);color:#fb7185;border-radius:8px;padding:5px 7px;font-size:8px;font-weight:900}
+    .empty-card{display:flex;align-items:center;gap:10px;border-style:dashed;opacity:.55}
+    .empty-card .player-avatar{background:rgba(255,255,255,.05);color:#625c68}
+    .setup-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+    .ready-btn{border:0;padding:10px 14px;border-radius:10px;background:#2563eb;color:#fff;font-size:10px;font-weight:900;box-shadow:0 6px 16px rgba(37,99,235,.2)}
+    .ready-btn.active{background:#16a34a}
+    .ready-progress-wrap{margin:12px 0 10px}
+    .ready-progress-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:9px;font-weight:900;color:#77727e;letter-spacing:.06em}
+    .ready-progress-meta strong{color:#facc15;font-size:11px}
+    .ready-progress-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+    .ready-progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#facc15,#22c55e);box-shadow:0 0 12px rgba(34,197,94,.35);transition:width .35s ease}
+    .host-hint{padding:11px 12px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);color:#77727e;font-size:9px;line-height:1.55}
+    .start-btn{width:100%;padding:13px;border:0;border-radius:12px;background:linear-gradient(110deg,#22c55e,#059669);color:#041008;font-family:Fredoka;font-size:19px;font-weight:700;box-shadow:0 12px 28px rgba(34,197,94,.2),inset 0 1px 0 rgba(255,255,255,.15)}
+    .start-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .start-btn:disabled{cursor:not-allowed;opacity:.35;filter:none;transform:none}
+    .room-head-pills{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}.capacity-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);color:#a7a2ad;font-size:8px;font-weight:900}.capacity-pill i{color:#facc15}.status-pill{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border-radius:999px;background:rgba(234,179,8,.09);border:1px solid rgba(234,179,8,.16);color:#facc15;font-size:8px;font-weight:900}
+    .status-pill.ready{background:rgba(34,197,94,.09);border-color:rgba(34,197,94,.18);color:#4ade80}
+    .chat-panel{display:flex;flex-direction:column;min-height:560px}
+    .voice-panel{margin-bottom:14px;padding:13px;border-radius:16px;background:linear-gradient(135deg,rgba(250,204,21,.07),rgba(239,68,68,.06));border:1px solid rgba(250,204,21,.13)}
+    .voice-panel.live-voice{border-color:rgba(74,222,128,.35);box-shadow:0 0 24px rgba(74,222,128,.08)}
+    .voice-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.voice-title{display:flex;align-items:center;gap:8px;font-family:Fredoka;font-size:15px}.voice-title i{color:#facc15}.voice-status{font-size:8px;font-weight:900;color:#77727e;margin-top:3px}.voice-status.live{color:#4ade80}.voice-controls{display:flex;gap:6px;align-items:center}.voice-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#fff;border-radius:9px;padding:8px 10px;font-size:9px;font-weight:900;cursor:pointer}.voice-btn.primary{background:#facc15;color:#100907;border-color:#facc15}.voice-btn.danger{color:#fb7185;border-color:rgba(248,113,113,.25)}.voice-btn:disabled{opacity:.4;cursor:not-allowed}.voice-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.voice-user{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:9px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06);font-size:8px;color:#d8d3db}.voice-dot{width:7px;height:7px;border-radius:50%;background:#625c68}.voice-dot.on{background:#4ade80;box-shadow:0 0 9px rgba(74,222,128,.6)}
+    .chat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .chat-header h2{margin:0;font-family:Fredoka;font-size:21px}
+    .chat-header span{color:#625c68;font-size:8px;font-weight:900}
+    .chat-live{display:inline-flex;align-items:center;gap:5px;color:#4ade80!important;font-size:8px;font-weight:900;letter-spacing:.08em}
+    .chat-live i{font-size:6px;animation:liveDot 1.4s ease-in-out infinite;color:#4ade80}
+    .chat{flex:1;min-height:430px;max-height:500px;overflow-y:auto;padding-right:4px;display:flex;flex-direction:column;gap:7px}
+    .chat::-webkit-scrollbar{width:5px}.chat::-webkit-scrollbar-thumb{background:#332538;border-radius:99px}
+    .chat-message{padding:8px 9px;border-radius:10px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);font-size:9px;line-height:1.45;animation:chatIn .2s ease;word-break:break-word}
+    @keyframes chatIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .chat-message.mine{border-color:rgba(250,204,21,.2);background:rgba(250,204,21,.06)}
+    .chat-message .chat-time{display:block;margin-top:3px;font-size:7px;color:#5a5560;font-weight:700}
+    .chat-image-link{display:block;margin-top:7px;max-width:100%;width:max-content;border-radius:10px;overflow:hidden}.chat-image-link img{display:block;max-width:100%;max-height:240px;object-fit:contain;border-radius:10px}.chat-message:has(.chat-image-link){max-width:100%}
+    .chat-message b{color:#facc15}.chat-message span{color:#d8d3db}
+    .chat-system{text-align:center;background:transparent;border-style:dashed;color:#8a8490;font-style:italic}
+    .emoji-bar{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 6px}
+    .emoji-btn{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:8px;padding:4px 7px;font-size:14px;cursor:pointer;transition:.15s;line-height:1}
+    .emoji-btn:hover{background:rgba(250,204,21,.12);border-color:rgba(250,204,21,.3);transform:scale(1.12)}
+    .chat-form{display:flex;gap:7px;margin-top:6px}
+    .chat-form input{min-width:0;flex:1;border:1px solid rgba(255,255,255,.10);background:#0b0610;color:#fff;border-radius:10px;padding:10px 11px;outline:none;font-size:10px}
+    .chat-form input:focus{border-color:#facc15}
+    .chat-form button{border:0;flex:none;width:40px;border-radius:10px;background:#facc15;color:#0b0610;font-weight:900}.chat-form button[type="button"]{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e9e4eb}.chat-form button:disabled{opacity:.5;cursor:wait}
+    .room-rules{margin-top:15px}
+    .room-rules .rule-line{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .room-rules .rule-line:last-child{border-bottom:0}
+    .rule-line b{color:#facc15;font-size:9px;width:24px}
+    .rule-line span{color:#77727e;font-size:9px;line-height:1.5}
+    .profile-modal .modal-card,.warning-modal .modal-card{max-width:500px}
+    .warning-modal .modal-card{border-color:rgba(248,113,113,.30)}
+    .warning-icon{width:58px;height:58px;border-radius:16px;margin:0 auto 11px;display:grid;place-items:center;background:rgba(220,38,38,.13);border:1px solid rgba(248,113,113,.22);color:#fb7185;font-size:20px}
+    .warning-modal h3{text-align:center}
+    .warning-modal #warningText{text-align:center}
+    .download-big{width:100%;border:0;padding:13px;border-radius:12px;background:linear-gradient(110deg,#facc15,#d97706);color:#100907;font-weight:900;font-size:11px;box-shadow:0 12px 28px rgba(234,179,8,.13)}
+    .download-big:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    @media(max-width:900px){.room-grid{grid-template-columns:1fr}.chat-panel{min-height:480px}.chat{min-height:300px}}
+    @media(max-width:620px){.container{width:min(100% - 24px,1180px)}.room-top{align-items:flex-start}.room-head-actions{flex-wrap:wrap;justify-content:flex-end}.room-code-wrap{display:none}.players{grid-template-columns:1fr}.panel{padding:16px}.panel-head{flex-direction:column}.mode-select{width:100%}}
+    .room-sound{margin-left:0}.room-brand-mark.image-mark{padding:0}
+  </style>
+</head>
+<body class="site-body">
+  <main class="container room-page">
+    <header class="room-top">
+      <a class="room-brand" href="../index.html">
+        <span class="room-brand-mark image-mark"><img src="../assets/logos/logo-mark.png" alt="TUNOTOGETHER.COM"></span>
+        <span><strong>TUNOTOGETHER.COM</strong><small>GAME LOBBY</small></span>
+      </a>
+
+      <div class="room-head-actions">
+        <div class="room-code-wrap" id="roomCodeWrap" title="Copy Code" style="cursor:pointer">
+          <span data-i18n="roomCodeLabel">ROOM CODE</span>
+          <strong id="roomCode">#UNO-----</strong>
+        </div>
+        <button class="mini-btn" id="copyCodeBtn" type="button"><i class="fa-solid fa-hashtag"></i> <span data-i18n="copyCode">Copy Code</span></button>
+        <button class="mini-btn" id="copyInviteBtn" type="button"><i class="fa-solid fa-copy"></i> <span data-i18n="inviteCopy">Copy Invite</span></button>
+        <button class="mini-btn" id="leaveTopBtn" data-sound="click" type="button"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="backHome">Home</span></button>
+        <button class="mini-btn theme-toggle" type="button" data-theme-toggle aria-label="Change theme" title="Change theme"><i class="fa-solid fa-palette" aria-hidden="true"></i><span data-theme-name>Midnight</span></button>
+        <button class="sound-toggle room-sound" id="soundToggleBtn" type="button" aria-label="Toggle sound"><i class="fa-solid fa-volume-high"></i><span data-i18n="closeSound">Sound On</span></button>
+        <select class="language-select" data-lang-select aria-label="Language"><option value="en">EN</option><option value="de">DE</option></select>
+      </div>
+    </header>
+
+    <div class="room-grid">
+      <section>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h1 data-i18n="roomLobby">Room Lobby</h1>
+              <p data-i18n="roomLobbyDesc">Invite friends, choose your avatar and wait until everyone is ready.</p>
+            </div>
+            <select id="modeSelect" class="mode-select" aria-label="Game mode"></select>
+          </div>
+
+          <div id="players" class="players"></div>
+        </div>
+
+        <div class="panel" style="margin-top:15px">
+          <div class="panel-head">
+            <div>
+              <h2 data-i18n="roomSetup">Table Setup</h2>
+              <p data-i18n="roomSetupDesc">When everyone is ready, the room owner can control the transition to the game.</p>
+            </div>
+            <div class="room-head-pills">
+              <span id="roomCapacity" class="capacity-pill"><i class="fa-solid fa-users"></i> 1 / 4 players</span>
+              <span id="roomStatus" class="status-pill"><i class="fa-solid fa-clock"></i> WAITING</span>
+            </div>
+          </div>
+
+          <div class="setup-row">
+            <button id="readyBtn" class="ready-btn" type="button" data-i18n="ready">READY</button>
+            <button id="profileBtn" class="mini-btn" type="button"><i class="fa-solid fa-user-pen"></i> <span data-i18n="editProfile">Edit My Profile</span></button>
+            <button id="shareNativeBtn" class="mini-btn" type="button"><i class="fa-solid fa-share-nodes"></i> <span data-i18n="shareRoom">Share</span></button>
+          </div>
+
+          <div class="ready-progress-wrap">
+            <div class="ready-progress-meta">
+              <span data-i18n="readyProgress">Ready</span>
+              <strong id="readyProgressText">0 / 0</strong>
+            </div>
+            <div class="ready-progress-bar"><div id="readyProgressFill" class="ready-progress-fill"></div></div>
+          </div>
+
+          <div id="hostHint" class="host-hint">Preparing connection...</div>
+          <button id="startBtn" class="start-btn" type="button" style="margin-top:12px" data-i18n="start">START GAME</button>
+        </div>
+
+        <div class="panel room-rules">
+          <div class="panel-head" style="margin-bottom:6px">
+            <div><h2 data-i18n="roomRules">Room Rules</h2><p>This lobby is the meeting place before moving into the desktop game.</p></div>
+          </div>
+          <div class="rule-line"><b>01</b><span data-i18n="roomRule1">Room capacity is set by the player count chosen when the room is created.</span></div>
+          <div class="rule-line"><b>02</b><span data-i18n="roomRule2">The room owner can change the mode and start the game.</span></div>
+          <div class="rule-line"><b>03</b><span data-i18n="roomRule3">Starting the game checks that every player has the desktop app.</span></div>
+        </div>
+      </section>
+
+      <aside class="panel chat-panel">
+        <div class="voice-panel">
+          <div class="voice-head">
+            <div><div class="voice-title"><i class="fa-solid fa-microphone"></i> <span data-i18n="voice">Voice Chat</span></div><div id="voiceStatus" class="voice-status">Microphone off</div></div>
+            <div class="voice-controls">
+              <button id="voiceJoinBtn" class="voice-btn primary" type="button"><i class="fa-solid fa-microphone"></i> <span data-i18n="voiceJoin">Join Voice</span></button>
+              <button id="voiceMuteBtn" class="voice-btn" type="button" disabled title="Mute microphone"><i class="fa-solid fa-microphone-slash"></i></button>
+              <button id="voiceLeaveBtn" class="voice-btn danger" type="button" disabled title="Leave voice chat"><i class="fa-solid fa-phone-slash"></i></button>
+            </div>
+          </div>
+          <div id="voiceList" class="voice-list"></div>
+        </div>
+        <div class="chat-header">
+          <h2 data-i18n="roomChat">Room Chat</h2>
+          <span class="chat-live"><i class="fa-solid fa-circle"></i> <span data-i18n="realtime">LIVE</span></span>
+        </div>
+        <div id="chat" class="chat"></div>
+        <div class="emoji-bar" id="emojiBar">
+          <button type="button" class="emoji-btn" data-emoji="🔥">🔥</button>
+          <button type="button" class="emoji-btn" data-emoji="😂">😂</button>
+          <button type="button" class="emoji-btn" data-emoji="💀">💀</button>
+          <button type="button" class="emoji-btn" data-emoji="🃏">🃏</button>
+          <button type="button" class="emoji-btn" data-emoji="⚡">⚡</button>
+          <button type="button" class="emoji-btn" data-emoji="👑">👑</button>
+          <button type="button" class="emoji-btn" data-emoji="🎉">🎉</button>
+          <button type="button" class="emoji-btn" data-emoji="👍">👍</button>
+        </div>
+        <form id="chatForm" class="chat-form">
+          <input id="chatInput" maxlength="500" autocomplete="off" data-i18n-placeholder="messagePlaceholder" placeholder="Write a message, press Enter to send...">
+          <button type="button" id="chatImageBtn" aria-label="Attach a photo" data-i18n-aria="imageUpload" data-i18n-title="imageUpload"><i class="fa-solid fa-image"></i></button>
+          <input id="chatImageInput" class="hidden" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
+          <button type="submit" aria-label="Send message" data-i18n-title="send"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </aside>
+    </div>
+  </main>
+
+  <div id="profileModal" class="modal-backdrop hidden profile-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="profileCloseBtn" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-icon yellow"><i class="fa-solid fa-user-pen"></i></div>
+      <h3 data-i18n="profileEdit">Edit Profile</h3>
+      <p data-i18n="profileDesc">Change the name and avatar shown in the room.</p>
+      <label class="field-label"><span data-i18n="username">Username</span><input id="profileName" maxlength="24" placeholder="Enter username" data-i18n-placeholder="username"></label>
+      <div class="label-line"><span data-i18n="chooseAvatar">Choose your avatar</span><small>20</small></div>
+      <div id="profileAvatars" class="avatar-grid"></div>
+      <button id="profileSaveBtn" class="modal-action yellow-action" type="button" data-i18n="save">Save</button>
+    </div>
+  </div>
+
+  <div id="warningModal" class="modal-backdrop hidden warning-modal" role="dialog" aria-modal="true" aria-labelledby="warningTitle">
+    <div class="modal-card">
+      <button class="modal-close" id="warningCloseBtn" type="button" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h3 id="warningTitle" data-i18n="warningStart">Game Could Not Start</h3>
+      <p id="warningText">Checking status...</p>
+      <button id="warningDownloadBtn" class="download-big" type="button"><i class="fa-solid fa-download"></i> <span data-i18n="download">Download Desktop</span></button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/i18n.js"></script>
+  <script src="../js/audio.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="./room.js"></script>
+</body>
+</html>

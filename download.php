@@ -1,3 +1,3 @@
 <?php
-header('Location: https://www.dropbox.com/scl/fi/lpe6x99yvcjbxgqej0zr2/TunotogetherSetup-Setup-1.0.0.exe?rlkey=4hzk8ji8ihvvwikxg2kb4iyrw&st=1stlozvg&dl=1', true, 302);
+header('Location: https://www.dropbox.com/scl/fi/t9o7vylc25my2clh77ggc/TunoTogether_Setup.exe?rlkey=d9ze60wma1ubp2y37ml9aisqk&st=zpljqz5k&dl=1', true, 302);
 exit;

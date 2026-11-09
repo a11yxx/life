@@ -22,7 +22,7 @@
     API_BASE: siteBase + '/api/rooms',
     // Place your installer as "TunoTogether_Setup.exe" directly in the project root folder,
     // or paste a direct download link (Dropbox, GitHub Releases, R2, etc.) below:
-    DOWNLOAD_URL: 'https://www.dropbox.com/scl/fi/9p9ja4hokzdp8j5b78bq2/TunoTogether_Setup.exe?rlkey=gewlwxgznd82z63fmzp7asm3z&st=frwgnb1p&dl=1',
+    DOWNLOAD_URL: 'https://www.dropbox.com/scl/fi/go4mpcc704mkr5yut5dhg/TunoTogether_Setup.exe?rlkey=rjxr3s0k8j312yfwi9kgrpcg7&st=d7optd0c&dl=1',
     MAX_PLAYERS: 10,
     ROOM_PREFIX: 'UNO-'
   });
